@@ -29,7 +29,7 @@ public:
 	const matrix<T, M, N> operator/(const T& d) noexcept;
 	//TODO: const matrix<T, M, N> operator/(const matrix<T, M, N>& v) noexcept;
 	friend std::ostream& operator<<(std::ostream& out, const matrix& v);
-	~matrix();
+	virtual ~matrix();
 };
 
 template<class T, size_t M, size_t N>
