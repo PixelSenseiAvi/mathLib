@@ -26,7 +26,7 @@ public:
 	const std::array<T, N> operator/(const vector& v) noexcept;
 	friend std::ostream& operator<<(std::ostream& out, const std::array<T, N>& v);
 
-	~vector();
+	virtual ~vector();
 };
 
 template<class T, size_t N>
