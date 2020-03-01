@@ -11,7 +11,6 @@ public:
 	std::array<std::array<T, M>, N> mat;
 	//Or std::array<T, M*N> mat;
 
-
 	//matrix constructor
 	matrix();
 	matrix(std::array<std::array<T, M>, N> &arr);
@@ -33,26 +32,26 @@ public:
 };
 
 template<class T, size_t M, size_t N>
-matrix<T, M, N>::matrix()
+inline matrix<T, M, N>::matrix()
 {
 	mat = {};
 }
 
 template<class T, size_t M, size_t N>
-matrix<T, M, N>::matrix(std::array<std::array<T, M>, N> &arr)
+inline matrix<T, M, N>::matrix(std::array<std::array<T, M>, N> &arr)
 {
 	std::copy(&arr[0][0], &arr[0][0] + M * N, &mat[0][0]);
 }
 
 
 template<class T, size_t M, size_t N>
-size_t matrix<T, M, N>::getRows()
+inline size_t matrix<T, M, N>::getRows()
 {
 	return M;
 }
 
 template<class T, size_t M, size_t N>
-size_t matrix<T, M, N>::getColumns()
+inline size_t matrix<T, M, N>::getColumns()
 {
 	return N;
 }
@@ -158,7 +157,7 @@ inline const matrix<T, M, N> matrix<T, M, N>::operator*(const T & d) noexcept
 }
 
 template<class T, size_t M, size_t N>
-inline const matrix<T, M, N> matrix<T, M, N>::operator*(const matrix<T, M, N>& v) noexcept
+const matrix<T, M, N> matrix<T, M, N>::operator*(const matrix<T, M, N>& v) noexcept
 {
 	matrix<T, M, N> matrix;
 	//std::array<std::array<T, M>, N> arr;
@@ -184,7 +183,7 @@ inline const matrix<T, M, N> matrix<T, M, N>::operator*(const matrix<T, M, N>& v
 
 
 template<class T, size_t M, size_t N>
-inline const matrix<T, M, N> matrix<T, M, N>::operator/(const T & d) noexcept
+const matrix<T, M, N> matrix<T, M, N>::operator/(const T & d) noexcept
 {
 	if (d == T(0))
 	{
