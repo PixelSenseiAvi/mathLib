@@ -32,7 +32,6 @@ public:
 template<class T, size_t N>
 inline vector<T, N>::vector(std::array<T, N>& arr)
 {
-	//Check: std::copy()
 	a = &arr;
 }
 
@@ -104,7 +103,7 @@ inline const std::array<T, N> vector<T, N>::operator/(const T & d) noexcept
 }
 
 template<class T, size_t N>
-inline const std::array<T, N> vector<T, N>::operator/(const vector & v) noexcept
+const std::array<T, N> vector<T, N>::operator/(const vector & v) noexcept
 {
 	std::array<T, N> vec;
 	for (size_t i = 0; i < N; ++i)
