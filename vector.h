@@ -91,7 +91,7 @@ const std::array<T, N> vector<T, N>::operator+(const vector& v) noexcept
 }
 
 template<class T, size_t N>
-inline const std::array<T, N> vector<T, N>::operator/(const T & d) noexcept
+const std::array<T, N> vector<T, N>::operator/(const T & d) noexcept
 {
 	std::array<T, N> vec;
 	for (size_t i = 0; i < N; ++i)
