@@ -8,24 +8,17 @@ public:
 	T* x = &(Vector<T, 2>::a[0]);
 	T* y = &(Vector<T, 2>::a[1]);
 
-	vec2();
+	vec2() = default;
 	vec2(T r, T b);
 
 	T cross(vec2<T> &v);
 };
 
 template<class T>
-vec2<T>::vec2()
-{
-	*x = T(0);
-	*y = T(0);
-}
-
-template<class T>
 vec2<T>::vec2(T r, T b)
 {
-	*x = r;
-	*y = b;
+	Vector<T, 2>::a[0] = r;
+    Vector<T, 2>::a[1] = b;
 }
 
 template<class T>
