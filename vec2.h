@@ -1,14 +1,14 @@
 #pragma once
-#include "vector.h"
+#include "vec.h"
 
 template<class T>
 class vec2 :
-	public vector<T, 2>
+	public Vector<T, 2>
 {	
 public:
-	//std::array<T, 2> arr = vector<T, 2>::a;
-	T* x = &(vector<T, 2>::a[0]);
-	T* y = &(vector<T, 2>::a[1]);
+	//std::array<T, 2> arr = Vector<T, 2>::a;
+	T* x = &(Vector<T, 2>::a[0]);
+	T* y = &(Vector<T, 2>::a[1]);
 
 	inline vec2();
 	inline vec2(T r, T b);

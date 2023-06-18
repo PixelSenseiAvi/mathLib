@@ -1,14 +1,14 @@
 #pragma once
-#include "vector.h"
+#include "vec.h"
 
 template<class T>
 class vec3 :
-	public vector<T, 3>
+	public Vector<T, 3>
 {
 public:
-	T* x = &(vector<T, 3>::a[0]);
-	T* y = &(vector<T, 3>::a[1]);
-	T* z = &(vector<T, 3>::a[2]);
+	T* x = &(Vector<T, 3>::a[0]);
+	T* y = &(Vector<T, 3>::a[1]);
+	T* z = &(Vector<T, 3>::a[2]);
 
 	inline vec3();
 	inline vec3(T r, T g, T b);
