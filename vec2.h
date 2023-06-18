@@ -2,45 +2,37 @@
 #include "vec.h"
 
 template<class T>
-class vec2 :
-	public Vector<T, 2>
+class vec2 : public Vector<T, 2>
 {	
 public:
-	//std::array<T, 2> arr = Vector<T, 2>::a;
 	T* x = &(Vector<T, 2>::a[0]);
 	T* y = &(Vector<T, 2>::a[1]);
 
-	inline vec2();
-	inline vec2(T r, T b);
+	vec2();
+	vec2(T r, T b);
 
-	//suitable operations can be implemented in the sub classes
-	inline std::array<T, 2> cross(vec2<T> &v);
-	~vec2();
+	T cross(vec2<T> &v);
 };
 
 template<class T>
-inline vec2<T>::vec2()
+vec2<T>::vec2()
 {
 	*x = T(0);
 	*y = T(0);
 }
 
 template<class T>
-inline vec2<T>::vec2(T r, T b)
+vec2<T>::vec2(T r, T b)
 {
 	*x = r;
 	*y = b;
 }
 
 template<class T>
-inline std::array<T, 2> vec2<T>::cross(vec2<T>& v)
+T vec2<T>::cross(vec2<T>& v)
 {
-	std::array<T, 2> arr = { (*y) * (v.a[0]), (*x) * (v.a[1]) };
-	return arr;
+	T result = *x * v.a[1] - *y * v.a[0];
+	return result;
 }
 
-template<class T>
-vec2<T>::~vec2()
-{
-}
 

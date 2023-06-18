@@ -6,7 +6,7 @@
 #include "matrix.h"
 #include "vec3.h"
 
-#include "vec4.h" //Can be implemented on request
+#include "vec4.h"
 #include "Mesh.h" //Already implemented in similar projects
 
 #include <vector>
