@@ -1,96 +1,99 @@
-/* SceneGraph is a data structure used for managing spatial representation of scenes.
-   A scene graph typically has a hierarchical, tree-like structure where the nodes represent objects, attributes, transformations, and so on.
-*/
-
 #pragma once
+
+// SceneGraph is a data structure for managing the spatial representation of a
+// scene. It has a hierarchical, tree-like structure where nodes represent
+// objects together with their transforms, colour, and child nodes. Each node's
+// world transform is the product of its parent's world transform and its own
+// local transform.
+
 #include "matrix.h"
 #include "vec3.h"
-
 #include "vec4.h"
-#include "Mesh.h" //Already implemented in similar projects
+#include "Mesh.h"
 
 #include <vector>
+
+// Convenience aliases mapping the generic library types to the names used here.
+using Vector3 = vec3<float>;
+using Vector4 = vec4<float>;
+using Matrix4 = matrix<float, 4, 4>;
 
 class SceneNode
 {
 public:
-    SceneNode(Mesh *m = NULL, Vector4 colour = Vector4(1, 1, 1, 1));
-    ~SceneNode(void);
+    explicit SceneNode(Mesh* mesh = nullptr,
+                       Vector4 colour = Vector4(1, 1, 1, 1))
+        : parent(nullptr),
+          mesh(mesh),
+          worldTransform(Matrix4::identity()),
+          transform(Matrix4::identity()),
+          modelScale(1, 1, 1),
+          colour(colour)
+    {
+    }
 
-    void SetTransform(const Matrix4 &matrix) { transform = matrix; }
-    const Matrix4 &GetTransform() const { return transform; }
-    Matrix4 GetWorldTransform() const { return worldTransform; }
+    virtual ~SceneNode()
+    {
+        for (SceneNode* child : children)
+            delete child;
+    }
+
+    // Non-copyable: nodes own their children via raw pointers.
+    SceneNode(const SceneNode&) = delete;
+    SceneNode& operator=(const SceneNode&) = delete;
+
+    void SetTransform(const Matrix4& m) { transform = m; }
+    const Matrix4& GetTransform() const { return transform; }
+    const Matrix4& GetWorldTransform() const { return worldTransform; }
+
     Vector4 GetColour() const { return colour; }
     void SetColour(Vector4 c) { colour = c; }
+
     Vector3 GetModelScale() const { return modelScale; }
     void SetModelScale(Vector3 s) { modelScale = s; }
-    Mesh *GetMesh() const { return mesh; }
-    void SetMesh(Mesh *m) { mesh = m; }
-    void AddChild(SceneNode *s);
-    virtual void Update(float msec);
-    virtual void Draw(const OGLRenderer &r);
-    std ::vector<SceneNode *>::const_iterator GetChildIteratorStart()
+
+    Mesh* GetMesh() const { return mesh; }
+    void SetMesh(Mesh* m) { mesh = m; }
+
+    void AddChild(SceneNode* child)
+    {
+        children.push_back(child);
+        child->parent = this;
+    }
+
+    std::vector<SceneNode*>::const_iterator GetChildIteratorStart() const
     {
         return children.begin();
     }
-    std ::vector<SceneNode *>::const_iterator GetChildIteratorEnd()
+    std::vector<SceneNode*>::const_iterator GetChildIteratorEnd() const
     {
         return children.end();
     }
 
+    virtual void Update(float msec)
+    {
+        if (parent)
+            worldTransform = parent->worldTransform * transform;
+        else
+            worldTransform = transform; // root: world transform is the local transform
+
+        for (SceneNode* child : children)
+            child->Update(msec);
+    }
+
+    virtual void Draw(const OGLRenderer& r)
+    {
+        (void)r; // renderer unused in this stub
+        if (mesh)
+            mesh->Draw();
+    }
+
 protected:
-    SceneNode *parent;
-    Mesh *mesh;
+    SceneNode* parent;
+    Mesh* mesh;
     Matrix4 worldTransform;
     Matrix4 transform;
     Vector3 modelScale;
     Vector4 colour;
-    std ::vector<SceneNode *> children;
+    std::vector<SceneNode*> children;
 };
-
-SceneNode ::SceneNode(Mesh *mesh, Vector4 colour)
-{
-    this - > mesh = mesh;
-    this - > colour = colour;
-    parent = NULL;
-    modelScale = Vector3(1, 1, 1);
-}
-
-SceneNode ::~SceneNode(void)
-{
-    for (unsigned int i = 0; i < children.size(); ++i)
-    {
-        delete children[i];
-    }
-}
-
-void SceneNode ::AddChild(SceneNode *s)
-{
-    children.push_back(s);
-    s - > parent = this;
-}
-
-void SceneNode ::Draw(const OGLRenderer &r)
-{
-    if (mesh)
-    {
-        mesh - > Draw()
-    };
-}
-
-void SceneNode ::Update(float msec)
-{
-    if (parent)
-    { // This node has a parent ...
-        worldTransform = parent - > worldTransform * transform;
-    }
-    else
-    { // Root node , world transform is local transform !
-        worldTransform = transform;
-    }
-    for (vector<SceneNode *>::iterator i = children.begin();
-         i != children.end(); ++i)
-    {
-        (*i) - > Update(msec);
-    }
-}

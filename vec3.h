@@ -1,34 +1,38 @@
 #pragma once
+
 #include "vec.h"
 
-template<class T>
+// 3D vector with named x/y/z accessors.
+template <class T>
 class vec3 : public Vector<T, 3>
 {
+    using Base = Vector<T, 3>;
+
 public:
-    T* x = &(Vector<T, 3>::a[0]);
-    T* y = &(Vector<T, 3>::a[1]);
-    T* z = &(Vector<T, 3>::a[2]);
-
     vec3() = default;
-    vec3(T x, T y, T z);
+    vec3(T x, T y, T z)
+    {
+        Base::a[0] = x;
+        Base::a[1] = y;
+        Base::a[2] = z;
+    }
 
-    Vector<T, 3> cross(vec3<T>& v);
+    // Allow a base-class result (e.g. from operator+) to be used as a vec3.
+    vec3(const Base& v) : Base(v) {}
+
+    T& x() { return Base::a[0]; }
+    T& y() { return Base::a[1]; }
+    T& z() { return Base::a[2]; }
+    const T& x() const { return Base::a[0]; }
+    const T& y() const { return Base::a[1]; }
+    const T& z() const { return Base::a[2]; }
+
+    // 3D cross product.
+    vec3<T> cross(const vec3<T>& v) const
+    {
+        return vec3<T>(
+            y() * v.z() - z() * v.y(),
+            z() * v.x() - x() * v.z(),
+            x() * v.y() - y() * v.x());
+    }
 };
-
-template<class T>
-vec3<T>::vec3(T x, T y, T z)
-{
-    Vector<T, 3>::a[0] = x;
-    Vector<T, 3>::a[1] = y;
-    Vector<T, 3>::a[2] = z;
-}
-
-template<class T>
-Vector<T, 3> vec3<T>::cross(vec3<T>& v)
-{
-    std::array<T, 3> result;
-    result[0] = *y * v.a[2] - *z * v.a[1];
-    result[1] = *z * v.a[0] - *x * v.a[2];
-    result[2] = *x * v.a[1] - *y * v.a[0];
-    return Vector<T, 3>(result);
-}
